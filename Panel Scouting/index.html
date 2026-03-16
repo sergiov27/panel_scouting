@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>SCOUT PRO 360°</title>
+
+<link rel="stylesheet" href="css/styles.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.css">
+<script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.js"></script>
+
+</head>
+<body>
+
+<header class="navbar">
+
+<div class="logo">
+<img src="logo_nobg.png" alt="Logo" class="logo-img">
+SCOUT PRO 360°
+</div>
+
+<nav>
+<a href="index.html">Dashboard</a>
+<a href="scatterplot.html">Scatter Plot</a>
+<a href="roles.html">Ficha Individual</a>
+</nav>
+
+</header>
+
+<h2>Vista General</h2>
+
+<div class="seccion-tabla">
+
+<div class="panel-filtros">
+
+<div class="filtro-minutos">
+
+<label><strong>Liga:</strong></label>
+
+<select id="selectorLiga">
+<option value="escocia">Escocia - Scottish Premiership</option>
+<option value="chile">Chile - Primera División</option>
+<option value="peru">Perú - Primera División</option>
+</select>
+
+</div>
+
+<div class="filtro-minutos">
+
+<label><strong>Filtrar por Minutos:</strong></label>
+
+<div class="valores-minutos">
+<span id="minValor">0</span> -
+<span id="maxValor">0</span>
+</div>
+
+<div id="sliderMinutos"></div>
+
+</div>
+
+<div class="filtro-minutos">
+
+<label><strong>Filtrar por Posición:</strong></label>
+
+<select id="selectorPosicion">
+<option value="todos">Todos</option>
+<option value="delantero">Delantero</option>
+<option value="mediocentro">Mediocentro</option>
+<option value="defensa">Defensa Central</option>
+<option value="extremo">Extremo</option>
+<option value="lateral">Lateral</option>
+<option value="Mediocentro Defensivo">Mediocentro Defensivo</option>
+</select>
+
+</div>
+
+</div>
+
+<div class="tabla-wrapper">
+
+<div class="contenedor-tabla">
+<table id="tabla_database"></table>
+</div>
+
+</div>
+
+</div>
+
+<h2>Comparador de Jugadores</h2>
+
+<div class="barra-radar">
+
+<div class="filtro-radar-box">
+<label>Jugador 1</label>
+<select id="jugador1"></select>
+</div>
+
+<div class="filtro-radar-box">
+<label>Jugador 2</label>
+<select id="jugador2"></select>
+</div>
+
+</div>
+
+<div class="contenedor-radares">
+
+<div class="radar-box">
+<div class="titulo-radar">Perfil Ofensivo</div>
+<canvas id="radarChart"></canvas>
+</div>
+
+<div class="radar-box">
+<div class="titulo-radar">Perfil Defensivo</div>
+<canvas id="radarDefensivo"></canvas>
+</div>
+
+<div class="radar-box">
+<div class="titulo-radar">Perfil Creativo</div>
+<canvas id="radarCreacion"></canvas>
+</div>
+
+</div>
+
+<script src="js/main.js"></script>
+
+</body>
+</html>
