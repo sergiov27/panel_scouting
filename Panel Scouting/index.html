@@ -3,9 +3,10 @@
 
 <head>
 <meta charset="UTF-8">
-<title>SCOUT PRO 360°</title>
+<title>SCOUT PRO - SLAB</title>
 
 <link rel="stylesheet" href="css/styles.css">
+<link href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2JL7SUc.woff2" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
@@ -16,6 +17,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.css">
 <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.1/dist/nouislider.min.js"></script>
 
+<script defer src="js/main.js"></script>
+
 </head>
 <body>
 
@@ -23,38 +26,37 @@
 
 <div class="logo">
 <img src="logo_nobg.png" alt="Logo" class="logo-img">
-SCOUT PRO 360°
+SCOUT PRO - SLAB
 </div>
 
 <nav>
-<a href="index.html">Dashboard</a>
-<a href="scatterplot.html">Scatter Plot</a>
-<a href="roles.html">Ficha Individual</a>
+<a href="index.html"><b>DASHBOARD</a></b>
+<a href="scatterplot.html"><b>SCOUTING</a></b>
+<a href="roles.html"><b>FICHA INDIVIDUAL</a></b>
 </nav>
 
 </header>
 
-<h2>Vista General</h2>
-
 <div class="seccion-tabla">
 
 <div class="panel-filtros">
+    <h3 class="titulo-panel-scouting">Vista General</h3>
 
 <div class="filtro-minutos">
 
-<label><strong>Liga:</strong></label>
+<label><strong>Seleccionar Liga</strong></label>
 
 <select id="selectorLiga">
-<option value="escocia">Escocia - Scottish Premiership</option>
-<option value="chile">Chile - Primera División</option>
-<option value="peru">Perú - Primera División</option>
+<option value="escocia">Scottish Premiership (SCO)</option>
+<option value="chile">Primera División (CHI)</option>
+<option value="peru">Liga 1 (PER)</option>
 </select>
 
 </div>
 
 <div class="filtro-minutos">
 
-<label><strong>Filtrar por Minutos:</strong></label>
+<label><strong>Minutos Jugados</strong></label>
 
 <div class="valores-minutos">
 <span id="minValor">0</span> -
@@ -65,9 +67,9 @@ SCOUT PRO 360°
 
 </div>
 
-<div class="filtro-minutos">
+<div class="filtro-general">
 
-<label><strong>Filtrar por Posición:</strong></label>
+<label><strong>Seleccionar Posición</strong></label>
 
 <select id="selectorPosicion">
 <option value="todos">Todos</option>
@@ -76,7 +78,6 @@ SCOUT PRO 360°
 <option value="defensa">Defensa Central</option>
 <option value="extremo">Extremo</option>
 <option value="lateral">Lateral</option>
-<option value="Mediocentro Defensivo">Mediocentro Defensivo</option>
 </select>
 
 </div>
@@ -93,42 +94,9 @@ SCOUT PRO 360°
 
 </div>
 
-<h2>Comparador de Jugadores</h2>
-
-<div class="barra-radar">
-
-<div class="filtro-radar-box">
-<label>Jugador 1</label>
-<select id="jugador1"></select>
-</div>
-
-<div class="filtro-radar-box">
-<label>Jugador 2</label>
-<select id="jugador2"></select>
 </div>
 
 </div>
-
-<div class="contenedor-radares">
-
-<div class="radar-box">
-<div class="titulo-radar">Perfil Ofensivo</div>
-<canvas id="radarChart"></canvas>
-</div>
-
-<div class="radar-box">
-<div class="titulo-radar">Perfil Defensivo</div>
-<canvas id="radarDefensivo"></canvas>
-</div>
-
-<div class="radar-box">
-<div class="titulo-radar">Perfil Creativo</div>
-<canvas id="radarCreacion"></canvas>
-</div>
-
-</div>
-
-<script src="js/main.js"></script>
 
 </body>
 </html>
