@@ -305,6 +305,7 @@ return context.dataset.borderColor;
 function crearRadarInicial(){
 
 const ctx=document.getElementById("radarChart");
+if(!ctx)return;
 
 radarChart=new Chart(ctx,{
 type:"radar",
@@ -339,6 +340,7 @@ plugins:[ChartDataLabels]
 function crearRadarDefensivo(){
 
 const ctx=document.getElementById("radarDefensivo");
+if(!ctx)return;
 
 radarDefensivo=new Chart(ctx,{
 type:"radar",
@@ -370,6 +372,7 @@ plugins:[ChartDataLabels]
 function crearRadarCreacion(){
 
 const ctx=document.getElementById("radarCreacion");
+if(!ctx)return;
 
 radarCreacion=new Chart(ctx,{
 type:"radar",
@@ -400,15 +403,18 @@ plugins:[ChartDataLabels]
 
 function actualizarRadar(){
 
-const jugador1=document.getElementById("jugador1").value;
-const jugador2=document.getElementById("jugador2").value;
+const el1=document.getElementById("jugador1");
+const el2=document.getElementById("jugador2");
+if(!el1||!el2)return;
+const jugador1=el1.value;
+const jugador2=el2.value;
 
 const datos1=dataPercentiles.find(j=>j.jugador===jugador1);
 const datos2=dataPercentiles.find(j=>j.jugador===jugador2);
 
 if(!datos1||!datos2)return;
 
-radarChart.data.datasets=[
+if(radarChart)radarChart.data.datasets=[
 {
 label:jugador1,
 data:metricasRadar.map(m=>datos1[m.key]??0),
@@ -423,7 +429,7 @@ backgroundColor:"rgba(59,130,246,0.2)"
 }
 ];
 
-radarDefensivo.data.datasets=[
+if(radarDefensivo)radarDefensivo.data.datasets=[
 {
 label:jugador1,
 data:metricasDefensivas.map(m=>datos1[m.key]??0),
@@ -438,7 +444,7 @@ backgroundColor:"rgba(59,130,246,0.2)"
 }
 ];
 
-radarCreacion.data.datasets=[
+if(radarCreacion)radarCreacion.data.datasets=[
 {
 label:jugador1,
 data:metricasCreacion.map(m=>datos1[m.key]??0),
@@ -453,9 +459,9 @@ backgroundColor:"rgba(59,130,246,0.2)"
 }
 ];
 
-radarChart.update();
-radarDefensivo.update();
-radarCreacion.update();
+if(radarChart)radarChart.update();
+if(radarDefensivo)radarDefensivo.update();
+if(radarCreacion)radarCreacion.update();
 
 }
 
@@ -489,14 +495,13 @@ select2.innerHTML="";
 
 cargarSelectores();
 
-radarChart.data.datasets=[];
-radarDefensivo.data.datasets=[];
-radarCreacion.data.datasets=[];
+if(radarChart){radarChart.data.datasets=[];radarChart.update();}
+if(radarDefensivo){radarDefensivo.data.datasets=[];radarDefensivo.update();}
+if(radarCreacion){radarCreacion.data.datasets=[];radarCreacion.update();}
 
-radarChart.update();
-radarDefensivo.update();
-radarCreacion.update();
-
+})
+.catch(function(err){
+console.error("Error cargando datos:", err);
 });
 
 }
@@ -505,20 +510,14 @@ crearRadarInicial();
 crearRadarDefensivo();
 crearRadarCreacion();
 
-document.getElementById("selectorLiga")
-.addEventListener("change",function(){
-
-cargarLiga(this.value);
-
-});
-
 cargarLiga("escocia");
 
 new TomSelect("#selectorLiga",{
 create:false,
 maxItems:1,
 sortField:{field:"text",direction:"asc"},
-dropdownParent:"body"
+dropdownParent:"body",
+onChange:function(value){
+cargarLiga(value);
+}
 });
-
-console.log("JS cargado correctamente");
