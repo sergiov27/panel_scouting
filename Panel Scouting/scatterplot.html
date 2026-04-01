@@ -33,7 +33,7 @@ SCOUT PRO 360°
 <nav>
 <a href="index.html"><b>DASHBOARD</a></b>
 <a href="scatterplot.html"><b>SCOUTING</a></b>
-<a href="roles.html"><b>FICHA INDIVIDUAL</a></b>
+<a href="ficha_individual.html"><b>FICHA INDIVIDUAL</a></b>
 </nav>
 
 </header>
@@ -70,18 +70,35 @@ SCOUT PRO 360°
             </div>
             <div id="sliderMinutosScatter"></div>
         </div>
+        <div class="filtro-minutos-scatter">
+            <label><strong id="tituloSliderMetricaX">Medida X</strong></label>
+            <div class="valores-minutos-scatter">
+                <span id="minValorXScatter">0</span> -
+                <span id="maxValorXScatter">0</span>
+            </div>
+            <div id="sliderMetricaXScatter"></div>
+        </div>
+        <div class="filtro-minutos-scatter">
+            <label><strong id="tituloSliderMetricaY">Medida Y</strong></label>
+            <div class="valores-minutos-scatter">
+                <span id="minValorYScatter">0</span> -
+                <span id="maxValorYScatter">0</span>
+            </div>
+            <div id="sliderMetricaYScatter"></div>
+        </div>
     </div>
     <div class="scatter-wrapper">
         <div class="scatter-plot">
             <div class="scatter-controles scatter-controles-superior">
                 <div class="control-box">
-                    <label><strong>Medida X</strong></label>
+                    <label><strong>Seleccionar medida 1</strong></label>
                     <select id="metricaX"></select>
                 </div>
                 <div class="control-box">
-                    <label><strong>Medida Y</strong></label>
+                    <label><strong>Seleccionar medida 2</strong></label>
                     <select id="metricaY"></select>
                 </div>
+                <div class="titulo-metricas-vs" id="tituloComparacionMetricas">Medida X vs Medida Y</div>
             </div>
             <div class="scatter-box">
                 <canvas id="scatterChart"></canvas>
@@ -125,6 +142,7 @@ SCOUT PRO 360°
 
 </div>
 
+<p class="nota-radares">Las metricas mostradas corresponden a acciones exitosas (p. ej., pases progresivos completados, regates exitosos).</p>
+
 </body>
 </html>
-
