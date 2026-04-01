@@ -31,7 +31,7 @@ const basesDatos = {
 
 const columnasDatabase = [
     "jugador",
-    "equipo",
+    "equipo_durante_el_periodo_seleccionado",
     "posicion_1",
     "edad",
     "pie",
@@ -46,7 +46,7 @@ const columnasDatabase = [
 
 const nombresColumnas = {
     jugador: "Jugador",
-    equipo: "Equipo",
+    equipo_durante_el_periodo_seleccionado: "Equipo",
     posicion_1: "Posición",
     edad: "Edad",
     pie: "Pie",
