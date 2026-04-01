@@ -53,8 +53,8 @@ const metricasFijas = [
 
 const nombresMetricas = {
     "remates_90": "Remates p/90",
-    "x_a": "xA",
-    "x_g": "xG",
+    "x_a": "Asistencias Esperadas (xA)",
+    "x_g": "Goles Esperados (xG)",
     "regates_exitosos_90": "Regates Exitosos p/90",
     "asistencias_90": "Asistencias p/90",
     "goles_90": "Goles p/90",
@@ -72,7 +72,7 @@ const nombresMetricas = {
     "aceleraciones_90": "Aceleraciones p/90",
     "regates_90": "Regates p/90",
     "entradas_90": "Entradas p/90",
-    "asist_remate_90": "Asist. de Remate p/90"
+    "asist_remate_90": "Asistencia de Tiro p/90"
 };
 
 const metricasRadar = [
@@ -145,19 +145,27 @@ scatterChart = new Chart(ctx, {
         datasets: [{
             label: "Jugadores",
             data: [],
-            backgroundColor: "#ffd50d",
-            pointRadius: 5,
-            pointHoverRadius: 7
+            backgroundColor: "rgba(255, 213, 13, 0.85)",
+            pointRadius: 8,
+            pointHoverRadius: 10
         }]
     },
     options: {
         responsive: true,
         maintainAspectRatio: true,
         aspectRatio: 3.5,
+        layout: {
+            padding: {
+                top: 0
+            }
+        },
         plugins: {
     legend: {
+        position: "bottom",
+        align: "center",
         labels: {
-            color: "#ffffff"
+            color: "#ffffff",
+            padding: 18
         }
     },
     datalabels: {
@@ -229,6 +237,102 @@ function llenarSelectMetricas() {
     selectY.selectedIndex = 1;
 }
 
+function actualizarTitulosSlidersMetricas() {
+    const metricaX = document.getElementById("metricaX")?.value;
+    const metricaY = document.getElementById("metricaY")?.value;
+    const tituloX = document.getElementById("tituloSliderMetricaX");
+    const tituloY = document.getElementById("tituloSliderMetricaY");
+    const tituloComparacion = document.getElementById("tituloComparacionMetricas");
+
+    if (tituloX && metricaX) {
+        tituloX.textContent = nombresMetricas[metricaX] || metricaX;
+    }
+
+    if (tituloY && metricaY) {
+        tituloY.textContent = nombresMetricas[metricaY] || metricaY;
+    }
+
+    if (tituloComparacion && metricaX && metricaY) {
+        const nombreX = nombresMetricas[metricaX] || metricaX;
+        const nombreY = nombresMetricas[metricaY] || metricaY;
+        tituloComparacion.textContent = `${nombreX} vs ${nombreY}`;
+    }
+}
+
+function formatearValorSlider(valor) {
+    return Number.isInteger(valor) ? String(valor) : String(Number(valor.toFixed(2)));
+}
+
+function configurarSliderMetricaScatter(sliderId, minId, maxId, metrica) {
+
+    const slider = document.getElementById(sliderId);
+    const minEl = document.getElementById(minId);
+    const maxEl = document.getElementById(maxId);
+
+    if (!slider || !minEl || !maxEl || !metrica) {
+        return;
+    }
+
+    const valores = dataOriginal
+        .map(jugador => Number(jugador[metrica]))
+        .filter(Number.isFinite);
+
+    if (slider.noUiSlider) {
+        slider.noUiSlider.destroy();
+    }
+
+    if (valores.length === 0) {
+        minEl.textContent = "0";
+        maxEl.textContent = "0";
+        return;
+    }
+
+    const minGlobal = Math.min(...valores);
+    const maxGlobal = Math.max(...valores);
+    const maxSeguro = maxGlobal === minGlobal ? minGlobal + 1 : maxGlobal;
+
+    noUiSlider.create(slider, {
+        start: [minGlobal, maxGlobal],
+        connect: true,
+        range: {
+            min: minGlobal,
+            max: maxSeguro
+        }
+    });
+
+    minEl.textContent = formatearValorSlider(minGlobal);
+    maxEl.textContent = formatearValorSlider(maxGlobal);
+
+    slider.noUiSlider.on("update", values => {
+        const minSeleccionado = Number(values[0]);
+        const maxSeleccionado = Number(values[1]);
+
+        minEl.textContent = formatearValorSlider(minSeleccionado);
+        maxEl.textContent = formatearValorSlider(maxSeleccionado);
+
+        aplicarFiltroMinutosScatter();
+    });
+}
+
+function configurarSlidersMetricasScatter() {
+    const metricaX = document.getElementById("metricaX")?.value;
+    const metricaY = document.getElementById("metricaY")?.value;
+
+    configurarSliderMetricaScatter(
+        "sliderMetricaXScatter",
+        "minValorXScatter",
+        "maxValorXScatter",
+        metricaX
+    );
+
+    configurarSliderMetricaScatter(
+        "sliderMetricaYScatter",
+        "minValorYScatter",
+        "maxValorYScatter",
+        metricaY
+    );
+}
+
 function configurarSliderMinutosScatter() {
 
     const slider = document.getElementById("sliderMinutosScatter");
@@ -277,15 +381,35 @@ function aplicarFiltroMinutosScatter() {
     const maxSeleccionado = parseInt(document.getElementById("maxValorScatter").textContent, 10);
     const selectorPosicion = document.getElementById("selectorPosicion");
     const posicionSeleccionada = (selectorPosicion?.value || "todos").toLowerCase();
+    const metricaX = document.getElementById("metricaX")?.value;
+    const metricaY = document.getElementById("metricaY")?.value;
+    const minX = parseFloat(document.getElementById("minValorXScatter")?.textContent || "NaN");
+    const maxX = parseFloat(document.getElementById("maxValorXScatter")?.textContent || "NaN");
+    const minY = parseFloat(document.getElementById("minValorYScatter")?.textContent || "NaN");
+    const maxY = parseFloat(document.getElementById("maxValorYScatter")?.textContent || "NaN");
 
     dataActual = dataOriginal.filter(jugador => {
         const minutos = parseInt(jugador.minutos_jugados, 10) || 0;
         const posicionJugador = (jugador.posicion_1 || "").toLowerCase();
+        const valorX = Number(jugador[metricaX]);
+        const valorY = Number(jugador[metricaY]);
         const cumplePosicion =
             posicionSeleccionada === "todos" ||
             posicionJugador.includes(posicionSeleccionada);
+        const cumpleMetricaX =
+            !Number.isFinite(minX) || !Number.isFinite(maxX)
+                ? true
+                : (Number.isFinite(valorX) && valorX >= minX && valorX <= maxX);
+        const cumpleMetricaY =
+            !Number.isFinite(minY) || !Number.isFinite(maxY)
+                ? true
+                : (Number.isFinite(valorY) && valorY >= minY && valorY <= maxY);
 
-        return minutos >= minSeleccionado && minutos <= maxSeleccionado && cumplePosicion;
+        return minutos >= minSeleccionado
+            && minutos <= maxSeleccionado
+            && cumplePosicion
+            && cumpleMetricaX
+            && cumpleMetricaY;
     });
 
     actualizarScatter();
@@ -297,21 +421,20 @@ function actualizarScatter() {
     const metricaX = document.getElementById("metricaX").value;
     const metricaY = document.getElementById("metricaY").value;
 
-    if (!metricaX || !metricaY || dataActual.length === 0) return;
+    if (!metricaX || !metricaY) return;
 
-    const puntos = dataActual.map(j => ({
-        x: Number(j[metricaX]),
-        y: Number(j[metricaY]),
-        jugador: j.jugador
-    }));
-
-    console.log("Primer jugador:", dataActual[0]);
-    console.log("Métricas:", metricaX, metricaY);
+    const puntos = dataActual
+        .map(j => ({
+            x: Number(j[metricaX]),
+            y: Number(j[metricaY]),
+            jugador: j.jugador
+        }))
+        .filter(p => Number.isFinite(p.x) && Number.isFinite(p.y));
 
     scatterChart.data.datasets[0].data = puntos;
 
-    scatterChart.options.scales.x.title.text = metricaX;
-    scatterChart.options.scales.y.title.text = metricaY;
+    scatterChart.options.scales.x.title.text = nombresMetricas[metricaX] || metricaX;
+    scatterChart.options.scales.y.title.text = nombresMetricas[metricaY] || metricaY;
 
     scatterChart.update();
 }
@@ -428,13 +551,13 @@ radarChart.data.datasets=[
 {
 label:jugador1,
 data:metricasRadar.map(m=>datos1[m.key]??0),
-borderColor:"#ffd50d",
+borderColor:"#10b981",
 backgroundColor:"rgba(255,213,13,0.2)"
 },
 {
 label:jugador2,
 data:metricasRadar.map(m=>datos2[m.key]??0),
-borderColor:"#3b82f6",
+borderColor:"#FFD50D",
 backgroundColor:"rgba(59,130,246,0.2)"
 }
 ];
@@ -443,13 +566,13 @@ radarDefensivo.data.datasets=[
 {
 label:jugador1,
 data:metricasDefensivas.map(m=>datos1[m.key]??0),
-borderColor:"#ffd50d",
+borderColor:"#10b981",
 backgroundColor:"rgba(255,213,13,0.2)"
 },
 {
 label:jugador2,
 data:metricasDefensivas.map(m=>datos2[m.key]??0),
-borderColor:"#3b82f6",
+borderColor:"#FFD50D",
 backgroundColor:"rgba(59,130,246,0.2)"
 }
 ];
@@ -458,13 +581,13 @@ radarCreacion.data.datasets=[
 {
 label:jugador1,
 data:metricasCreacion.map(m=>datos1[m.key]??0),
-borderColor:"#ffd50d",
+borderColor:"#10b981",
 backgroundColor:"rgba(255,213,13,0.2)"
 },
 {
 label:jugador2,
 data:metricasCreacion.map(m=>datos2[m.key]??0),
-borderColor:"#3b82f6",
+borderColor:"#FFD50D",
 backgroundColor:"rgba(59,130,246,0.2)"
 }
 ];
@@ -537,6 +660,7 @@ function cargarLiga(liga) {
 
         dataOriginal = database;
         dataPercentiles = percentiles;
+        configurarSlidersMetricasScatter();
         configurarSliderMinutosScatter();
 
         const select1 = document.getElementById("jugador1");
@@ -565,10 +689,18 @@ function cargarLiga(liga) {
 
 // ====== EVENTOS ======
 document.getElementById("metricaX")
-.addEventListener("change", actualizarScatter);
+.addEventListener("change", () => {
+    actualizarTitulosSlidersMetricas();
+    configurarSlidersMetricasScatter();
+    aplicarFiltroMinutosScatter();
+});
 
 document.getElementById("metricaY")
-.addEventListener("change", actualizarScatter);
+.addEventListener("change", () => {
+    actualizarTitulosSlidersMetricas();
+    configurarSlidersMetricasScatter();
+    aplicarFiltroMinutosScatter();
+});
 
 document.getElementById("selectorLigaScatter")
 .addEventListener("change", e => {
@@ -580,9 +712,11 @@ document.getElementById("selectorPosicion")
 
 // ====== INIT ======
 llenarSelectMetricas();
+actualizarTitulosSlidersMetricas();
 crearRadarInicial();
 crearRadarDefensivo();
 crearRadarCreacion();
+configurarSlidersMetricasScatter();
 cargarLiga("escocia");
 
 // INICIALIZAR TOM-SELECT 
