@@ -13,6 +13,16 @@ h2{
     text-align: center;
 }
 
+.page-scatter h2{
+    display:block;
+    width:fit-content;
+    margin:0 auto;
+    padding:12px 140px;
+    border:2px solid #ffffff;
+    border-radius:10px;
+    font-size:18px;
+}
+
 /* ===== NAVBAR ===== */
 
 .navbar{
@@ -121,23 +131,34 @@ h2{
 }
 
 .ficha-titulo-bloque{
-    flex:0 0 calc(44% - 8px);
-    width:calc(44% - 8px);
+    flex:1;
+    width:auto;
+    min-width:0;
     display:flex;
     align-items:center;
-    padding-left:10px;
+    justify-content:center;
+    margin-right:12px;
+    padding:8px 12px;
+    border:2px solid #ffffff;
+    border-radius:10px;
+    box-sizing:border-box;
 }
 
 .ficha-titulo-bloque h1{
     margin:0;
     font-size:34px;
     color:#ffffff;
+    text-align:center;
 }
 
 .ficha-filtros .filtro-general{
     flex:0 0 calc(16% - 8px);
     width:calc(16% - 8px);
     padding:8px;
+}
+
+.ficha-filtros .filtro-general:last-of-type{
+    margin-right:12px;
 }
 
 .ficha-filtros .filtro-general label{
@@ -400,7 +421,7 @@ transform:scale(1.2);
     gap:12px;
     margin:20px;
     align-items:stretch;
-    background-color: #1e293b;
+    background-color: transparent;
 }
 
 .panel-filtros{
@@ -419,14 +440,18 @@ transform:scale(1.2);
 
 .page-scatter .panel-filtros{
     width:500px;
+    background-color:transparent;
 }
 
 .titulo-panel-scouting{
-    margin:0;
+    margin:0 0 4px 0;
+    padding:12px 12px;
     text-align:center;
     font-size:18px;
     font-weight:700;
     color:#ffffff;
+    border:2px solid #ffffff;
+    border-radius:10px;
 }
 
 .tabla-wrapper,
@@ -442,6 +467,7 @@ transform:scale(1.2);
     display:flex;
     align-items:center;
     justify-content:center;
+    background-color:transparent;
 }
 
 .page-scatter .scatter-wrapper{
@@ -548,9 +574,11 @@ tr:hover{
 
 .scatter-box{
     background:#1e293b;
-    border-radius:0;
+    border-radius:10px;
+    border:2px solid #ffffff;
     padding:12px;
-    width:100%;
+    margin:8px 12px;
+    width:calc(100% - 24px);
     height:auto;
     flex:1;
     box-sizing:border-box;
@@ -762,7 +790,37 @@ color:white;
 }
 
 .valorMercadoValor{
-    font-size:18px;
+    font-size:28px;
+    font-weight:700;
+    color:#10b981;
+}
+
+.scoreFinalJugador{
+    width:120px;
+    height:120px;
+    border-radius:8px;
+    background:#0f172a;
+    border:1px solid #334155;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:8px;
+    padding:8px;
+    flex-shrink:0;
+}
+
+.scoreFinalLabel{
+    font-size:12px;
+    color:#ffffff;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+}
+
+.scoreFinalValor{
+    font-size:28px;
     font-weight:700;
     color:#10b981;
 }
@@ -791,18 +849,89 @@ color:white;
 }
 
 .cajaPercentilesIzquierda{
-    width:25%;
-    min-height:500px;
+    width:18%;
+    padding:8px;
     align-self:flex-start;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    gap:14px;
+}
+
+.imagen-posicion{
+    width:100%;
+    max-width:280px;
+    height:auto;
+    object-fit:contain;
+    display:block;
+    margin:0 auto;
+}
+
+.similares-box{
+    width:100%;
+    background-color:#0f172a;
+    border:1px solid #334155;
+    border-radius:8px;
+    padding:10px;
+    box-sizing:border-box;
+}
+
+.similares-titulo{
+    font-size:13px;
+    font-weight:700;
+    color:#ffffff;
+    margin-bottom:8px;
+    text-align:center;
+}
+
+.lista-similares{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.lista-similares li{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-size:12px;
+    color:#cbd5e1;
+    border-bottom:1px dashed #334155;
+    padding-bottom:4px;
+}
+
+.lista-similares li:last-child{
+    border-bottom:none;
+    padding-bottom:0;
+}
+
+.similares-nombre{
+    flex:1;
+    min-width:0;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.similares-score{
+    color:#10b981;
+    font-weight:700;
 }
 
 .cajaPercentilesDerecha{
     width:75%;
+    background-color:transparent;
+    border:none;
 }
 
 .bloquesMetricas{
     display:flex;
-    justify-content:center;
+    justify-content:space-between;
     gap:32px;
 }
 
@@ -821,7 +950,7 @@ color:white;
     border-radius:8px;
     padding:14px;
     width:100%;
-    flex:1;
+    flex:0;
     min-width:0;
 }
 
@@ -829,9 +958,9 @@ color:white;
     background-color:#0f172a;
     border:1px solid #334155;
     border-radius:8px;
-    padding:14px 14px 8px;
+    padding:14px;
     width:100%;
-    flex:1;
+    flex:0;
     min-width:0;
 }
 
@@ -841,7 +970,7 @@ color:white;
     border-radius:8px;
     padding:14px;
     width:100%;
-    flex:1;
+    flex:0;
     min-width:0;
 }
 
@@ -851,7 +980,7 @@ color:white;
     border-radius:8px;
     padding:14px;
     width:100%;
-    flex:1;
+    flex:0;
     min-width:0;
 }
 
@@ -860,8 +989,8 @@ color:white;
     border:1px solid #334155;
     border-radius:8px;
     padding:14px;
-    width:60%;
-    margin:16px auto 0;
+    width:100%;
+    flex:1;
 }
 
 .bloqueFinalizacionTitulo{
@@ -886,6 +1015,14 @@ color:white;
     font-weight:700;
     margin-bottom:14px;
     text-align:center;
+}
+
+.nota-creacion{
+    margin:6px 4px 0;
+    font-size:14px;
+    line-height:1.35;
+    color:#ffffff;
+    font-style:italic;
 }
 
 .bloqueProgresionTitulo{
@@ -1005,5 +1142,6 @@ color:white;
         width:100%;
     }
 }
+
 
 
