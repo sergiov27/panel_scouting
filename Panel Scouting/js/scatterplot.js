@@ -75,6 +75,29 @@ const nombresMetricas = {
     "asist_remate_90": "Asistencia de Tiro p/90"
 };
 
+function compararTexto(a, b) {
+    return a.localeCompare(b, "es", { sensitivity: "base" });
+}
+
+function ordenarOpcionesSelect(selector, mantenerPrimera = false) {
+    const select = document.querySelector(selector);
+    if (!select) return;
+
+    const opciones = Array.from(select.options);
+    if (opciones.length <= 1) return;
+
+    const primera = mantenerPrimera ? opciones.shift() : null;
+    opciones.sort((a, b) => compararTexto(a.textContent, b.textContent));
+
+    select.innerHTML = "";
+
+    if (primera) {
+        select.appendChild(primera);
+    }
+
+    opciones.forEach(opcion => select.appendChild(opcion));
+}
+
 const metricasRadar = [
 {key:"percentile_duelos_aereos_ganados_90",label:"Duelos Aereos"},
 {key:"percentile_goles_excepto_los_penaltis_90",label:"Goles s/p"},
@@ -221,7 +244,13 @@ function llenarSelectMetricas() {
     selectX.innerHTML = "";
     selectY.innerHTML = "";
 
-    metricasFijas.forEach(col => {
+    const metricasOrdenadas = [...metricasFijas].sort((a, b) => {
+        const nombreA = nombresMetricas[a] || a.replaceAll("_", " ");
+        const nombreB = nombresMetricas[b] || b.replaceAll("_", " ");
+        return compararTexto(nombreA, nombreB);
+    });
+
+    metricasOrdenadas.forEach(col => {
 
         let op1 = document.createElement("option");
         op1.value = col;
@@ -712,6 +741,8 @@ document.getElementById("selectorPosicion")
 
 // ====== INIT ======
 llenarSelectMetricas();
+ordenarOpcionesSelect("#selectorLigaScatter");
+ordenarOpcionesSelect("#selectorPosicion", true);
 actualizarTitulosSlidersMetricas();
 crearRadarInicial();
 crearRadarDefensivo();
@@ -725,4 +756,6 @@ new TomSelect("#metricaX");
 new TomSelect("#metricaY");
 
 });
+
+
 
